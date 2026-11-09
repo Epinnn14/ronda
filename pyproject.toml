@@ -1,0 +1,20 @@
+[project]
+name = "ronda"
+version = "0.1.0"
+description = "Neighbourhood (RT) admin: households, monthly dues, cash book and a fair night-watch roster"
+requires-python = ">=3.12"
+license = "MIT"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["test_*.py"]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+extend-exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "DJ", "SIM"]
