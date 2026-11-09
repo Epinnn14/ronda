@@ -1,0 +1,35 @@
+{% extends "rt/base.html" %}{% load rt %}
+{% block title %}Kas {{ year }}{% endblock %}
+{% block content %}
+<div class="head-row">
+  <div><h1>Laporan kas {{ year }}</h1><p class="muted">{{ rt_name }} · terbuka untuk semua warga</p></div>
+  <div class="pager"><a href="?year={{ year|add:'-1' }}">← {{ year|add:"-1" }}</a><a href="?year={{ year|add:'1' }}">{{ year|add:"1" }} →</a></div>
+</div>
+<section class="cards">
+  <div class="card"><b>{{ opening|rupiah }}</b><span>saldo awal</span></div>
+  <div class="card good"><b>{{ income|rupiah }}</b><span>pemasukan iuran</span></div>
+  <div class="card warn"><b>{{ spent|rupiah }}</b><span>pengeluaran</span></div>
+  <div class="card {% if closing < 0 %}warn{% endif %}"><b>{{ closing|rupiah }}</b><span>saldo akhir</span></div>
+</section>
+<div class="grid2">
+  <section class="panel">
+    <h2>Per bulan</h2>
+    <table class="list">
+      <thead><tr><th>Bulan</th><th class="num">Masuk</th><th class="num">Keluar</th><th class="num">Saldo</th></tr></thead>
+      <tbody>{% for m in months %}<tr><td>{{ m.label }}</td><td class="num">{{ m.income|rupiah }}</td><td class="num">{{ m.expense|rupiah }}</td><td class="num"><b>{{ m.balance|rupiah }}</b></td></tr>{% endfor %}</tbody>
+    </table>
+  </section>
+  <section class="panel">
+    <h2>Pengeluaran</h2>
+    {% if form %}
+    <form method="post" action="{% url 'expense_add' %}" class="form compact">{% csrf_token %}
+      {{ form.as_div }}<button class="btn">Catat pengeluaran</button>
+    </form>
+    {% endif %}
+    <table class="list">
+      {% for e in expenses %}<tr><td>{{ e.spent_on|date:"d/m" }}</td><td><span class="tag">{{ e.get_category_display }}</span> {{ e.description }}</td><td class="num">{{ e.amount|rupiah }}</td></tr>
+      {% empty %}<tr><td class="muted">Belum ada pengeluaran tahun ini.</td></tr>{% endfor %}
+    </table>
+  </section>
+</div>
+{% endblock %}

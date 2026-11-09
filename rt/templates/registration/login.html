@@ -1,0 +1,12 @@
+{% extends "rt/base.html" %}
+{% block title %}Masuk{% endblock %}
+{% block content %}
+<form method="post" class="panel form narrow">{% csrf_token %}
+  <h1>Masuk pengurus</h1>
+  {% if form.errors %}<div class="flash error">Username atau password salah.</div>{% endif %}
+  {{ form.as_div }}
+  <input type="hidden" name="next" value="{{ next }}">
+  <button class="btn">Masuk</button>
+  <p class="muted small">Warga bisa melihat <a href="{% url 'schedule' %}">jadwal ronda</a> dan <a href="{% url 'cash' %}">laporan kas</a> tanpa login.</p>
+</form>
+{% endblock %}

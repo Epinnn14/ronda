@@ -1,0 +1,4 @@
+{% load rt %}<td class="c {{ state }}" id="c-{{ hh.pk }}-{{ month|ym }}">{% if state != "na" %}<button
+  hx-post="{% url 'dues_toggle' hh.pk month|ym %}" hx-target="#c-{{ hh.pk }}-{{ month|ym }}" hx-swap="outerHTML"
+  {% if state == "paid" %}hx-confirm="Batalkan pembayaran {{ hh.address }} {{ month|month_label }}?"{% endif %}
+  title="{{ hh.address }} · {{ month|month_label }}">{% if state == "paid" %}✓{% elif state == "due" %}!{% else %}+{% endif %}</button>{% endif %}{% if error %}<span class="err" role="alert">{{ error }}</span>{% endif %}</td>

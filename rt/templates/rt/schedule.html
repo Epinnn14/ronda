@@ -1,0 +1,17 @@
+{% extends "rt/base.html" %}
+{% block title %}Jadwal ronda{% endblock %}
+{% block content %}
+<div class="head-row">
+  <div><h1>Jadwal ronda</h1><p class="muted">{{ rt_name }}</p></div>
+  {% if can_edit %}
+  <form method="post" action="{% url 'schedule_generate' %}" class="inline-form">{% csrf_token %}
+    <input type="hidden" name="month" value="{{ month|date:'Y-m' }}">
+    <label>Per malam {{ form.per_night }}</label>
+    <label>Kode {{ form.seed }}</label>
+    <button class="btn" onclick="return confirm('Jadwal bulan ini akan diganti. Lanjut?')">Buat ulang jadwal</button>
+    <a class="btn ghost" href="{% url 'guards' %}">Petugas</a>
+  </form>
+  {% endif %}
+</div>
+{% include "rt/partials/calendar.html" %}
+{% endblock %}

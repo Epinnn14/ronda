@@ -1,0 +1,27 @@
+{% extends "rt/base.html" %}{% load rt %}
+{% block title %}{{ household.address }}{% endblock %}
+{% block content %}
+<div class="head-row">
+  <h1>{{ household.address }} · {{ household.head_name }}</h1>
+  <a class="btn ghost" href="{% url 'household_edit' household.pk %}">Ubah</a>
+</div>
+<p class="muted">{{ household.members }} anggota · tinggal sejak {{ household.joined_on|date:"d M Y" }}{% if household.left_on %} · pindah {{ household.left_on|date:"d M Y" }}{% endif %}{% if household.phone %} · {{ household.phone }}{% endif %}</p>
+<div class="grid2">
+  <section class="panel">
+    <h2>Tunggakan {% if arrears %}<span class="warn-text">{{ arrears_total|rupiah }}</span>{% endif %}</h2>
+    {% if arrears %}
+      <ul class="chips">{% for a in arrears %}<li class="chip due">{{ a.label }} · {{ a.amount|rupiah }}</li>{% endfor %}</ul>
+      <details><summary>Teks pengingat</summary><pre class="note">{{ reminder }}</pre></details>
+      {% if wa %}<a class="btn wa" href="{{ wa }}" target="_blank" rel="noopener">Kirim via WhatsApp</a>{% endif %}
+    {% else %}<p class="good-text">Lunas 🎉</p>{% endif %}
+  </section>
+  <section class="panel">
+    <h2>Riwayat bayar</h2>
+    <table class="list">
+      {% for p in payments %}<tr><td>{{ p.month|month_label:"short" }}</td><td class="num">{{ p.amount|rupiah }}</td><td class="muted">dibayar {{ p.paid_on|date:"d/m/Y" }}</td></tr>
+      {% empty %}<tr><td class="muted">Belum ada pembayaran.</td></tr>{% endfor %}
+    </table>
+    {% if guards %}<h2>Petugas ronda</h2><ul class="chips">{% for g in guards %}<li class="chip">{{ g.name }}</li>{% endfor %}</ul>{% endif %}
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% load rt %}<form id="calendar" {% if can_edit %}hx-post="{% url 'schedule_swap' %}" hx-target="#calendar" hx-swap="outerHTML"{% endif %}>
+  <input type="hidden" name="month" value="{{ month|date:'Y-m' }}">
+  <div class="cal-head">
+    <a href="?month={{ prev|ym }}">←</a><h2>{{ month|month_label }}</h2><a href="?month={{ next|ym }}">→</a>
+    {% if can_edit %}<button class="btn small" type="submit">Tukar 2 jadwal terpilih</button>{% endif %}
+  </div>
+  {% if swap_error %}<div class="flash error">{{ swap_error }}</div>{% elif swap_ok %}<div class="flash success">Jadwal ditukar.</div>{% endif %}
+  <div class="cal">
+    {% for w in weekdays %}<div class="wd">{{ w }}</div>{% endfor %}
+    {% for _ in leading_blanks %}<div class="day blank"></div>{% endfor %}
+    {% for d, shifts in days %}
+      <div class="day{% if d == today %} today{% endif %}{% if d.weekday >= 5 %} weekend{% endif %}">
+        <span class="n">{{ d.day }}</span>
+        {% for s in shifts %}
+          {% if can_edit %}<label class="who"><input type="checkbox" name="shift" value="{{ s.pk }}"> {{ s.guard.name }}</label>
+          {% else %}<span class="who">{{ s.guard.name }}</span>{% endif %}
+        {% empty %}<span class="muted small">–</span>{% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+  {% if counts %}
+  <p class="muted small fair">Jumlah tugas bulan ini: {% for name, n in counts %}{{ name }} {{ n }}×{% if not forloop.last %} · {% endif %}{% endfor %}</p>
+  {% endif %}
+</form>

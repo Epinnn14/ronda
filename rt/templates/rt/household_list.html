@@ -1,0 +1,17 @@
+{% extends "rt/base.html" %}
+{% block title %}Warga{% endblock %}
+{% block content %}
+<div class="head-row"><h1>Data warga</h1><a class="btn" href="{% url 'household_new' %}">+ Rumah baru</a></div>
+<table class="list wide">
+  <thead><tr><th>Alamat</th><th>Kepala keluarga</th><th>No. HP</th><th class="num">Anggota</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for hh in households %}
+    <tr class="{% if not hh.is_active %}faded{% endif %}">
+      <td><a href="{% url 'household_detail' hh.pk %}"><b>{{ hh.address }}</b></a></td>
+      <td>{{ hh.head_name }}</td><td>{{ hh.phone }}</td><td class="num">{{ hh.members }}</td>
+      <td>{% if not hh.is_active %}<span class="tag">pindah</span>{% elif hh.exempt %}<span class="tag">bebas iuran</span>{% endif %}</td>
+    </tr>
+  {% empty %}<tr><td colspan="5" class="muted">Belum ada data.</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock %}

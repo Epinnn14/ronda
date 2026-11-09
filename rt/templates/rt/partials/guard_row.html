@@ -1,0 +1,4 @@
+<tr id="g-{{ g.pk }}" class="{% if not g.active %}faded{% endif %}">
+  <td>{{ g.name }}</td><td>{{ g.household.address }}</td><td>{{ g.unavailable_labels|default:"–" }}</td>
+  <td><button class="btn ghost small" hx-post="{% url 'guard_toggle' g.pk %}" hx-target="#g-{{ g.pk }}" hx-swap="outerHTML">{% if g.active %}Nonaktifkan{% else %}Aktifkan{% endif %}</button></td>
+</tr>

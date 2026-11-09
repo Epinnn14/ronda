@@ -1,0 +1,18 @@
+{% extends "rt/base.html" %}
+{% block title %}Petugas ronda{% endblock %}
+{% block content %}
+<h1>Petugas ronda</h1>
+<div class="grid2">
+  <section class="panel">
+    <table class="list">
+      <thead><tr><th>Nama</th><th>Rumah</th><th>Tidak bisa</th><th></th></tr></thead>
+      <tbody>{% for g in guards %}{% include "rt/partials/guard_row.html" %}{% empty %}<tr><td class="muted">Belum ada petugas.</td></tr>{% endfor %}</tbody>
+    </table>
+  </section>
+  <form method="post" class="panel form">{% csrf_token %}
+    <h2>Tambah petugas</h2>
+    {{ form.as_div }}
+    <button class="btn">Tambah</button>
+  </form>
+</div>
+{% endblock %}

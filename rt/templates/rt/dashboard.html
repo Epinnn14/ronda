@@ -1,0 +1,32 @@
+{% extends "rt/base.html" %}{% load rt %}
+{% block title %}Ringkasan{% endblock %}
+{% block content %}
+<h1>Ringkasan {{ month|month_label }}</h1>
+<section class="cards">
+  <div class="card"><b>{{ households }}</b><span>rumah aktif</span></div>
+  <div class="card">
+    <b>{{ paid }}/{{ expected }}</b><span>sudah bayar iuran bulan ini</span>
+    <div class="bar"><i style="width: {{ percent }}%"></i></div>
+  </div>
+  <div class="card warn"><b>{{ arrears_total|rupiah }}</b><span><a href="{% url 'arrears' %}">tunggakan dari {{ owing_count }} rumah →</a></span></div>
+  <div class="card {% if balance < 0 %}warn{% else %}good{% endif %}"><b>{{ balance|rupiah }}</b><span><a href="{% url 'cash' %}">saldo kas →</a></span></div>
+</section>
+<div class="grid2">
+  <section class="panel">
+    <h2>Ronda malam ini</h2>
+    {% if tonight %}
+      <ul class="chips">{% for s in tonight %}<li class="chip">{{ s.guard.name }}</li>{% endfor %}</ul>
+    {% else %}
+      <p class="muted">Belum ada jadwal. <a href="{% url 'schedule' %}">Buat jadwal →</a></p>
+    {% endif %}
+  </section>
+  <section class="panel">
+    <h2>Pengeluaran terakhir</h2>
+    <table class="list">
+      {% for e in recent_expenses %}
+        <tr><td>{{ e.spent_on|date:"d/m" }}</td><td>{{ e.description }}</td><td class="num">{{ e.amount|rupiah }}</td></tr>
+      {% empty %}<tr><td class="muted">Belum ada.</td></tr>{% endfor %}
+    </table>
+  </section>
+</div>
+{% endblock %}

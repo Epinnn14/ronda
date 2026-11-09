@@ -1,0 +1,10 @@
+{% extends "rt/base.html" %}
+{% block title %}{% if household %}Ubah {{ household.address }}{% else %}Rumah baru{% endif %}{% endblock %}
+{% block content %}
+<h1>{% if household %}Ubah {{ household.address }}{% else %}Rumah baru{% endif %}</h1>
+<form method="post" class="panel form">{% csrf_token %}
+  {{ form.as_div }}
+  <div class="actions"><button class="btn">Simpan</button>
+    <a href="{% if household %}{% url 'household_detail' household.pk %}{% else %}{% url 'households' %}{% endif %}">Batal</a></div>
+</form>
+{% endblock %}

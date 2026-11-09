@@ -1,0 +1,28 @@
+{% extends "rt/base.html" %}{% load rt %}
+{% block title %}Iuran {{ year }}{% endblock %}
+{% block content %}
+<div class="head-row">
+  <h1>Iuran warga {{ year }}</h1>
+  <div class="pager">
+    <a href="?year={{ year|add:'-1' }}">← {{ year|add:"-1" }}</a>
+    <a href="?year={{ year|add:'1' }}">{{ year|add:"1" }} →</a>
+    <a class="btn ghost small" href="{% url 'arrears' %}">Daftar tunggakan</a>
+  </div>
+</div>
+<p class="muted">Tarif bulan ini {{ rate|rupiah }}. Klik kotak untuk mencatat pembayaran, klik lagi untuk membatalkan.</p>
+<div class="scroll">
+<table class="matrix">
+  <thead><tr><th>Rumah</th>{% for m in months %}<th>{{ m|month_label:"short"|slice:":3" }}</th>{% endfor %}<th class="num">Kurang</th></tr></thead>
+  <tbody>
+  {% for row in rows %}
+    <tr>
+      <th><a href="{% url 'household_detail' row.household.pk %}">{{ row.household.address }}</a> <small>{{ row.household.head_name }}</small></th>
+      {% for month, state in row.cells %}{% include "rt/partials/dues_cell.html" with hh=row.household %}{% endfor %}
+      <td class="num">{% if row.due_count %}<span class="warn-text">{{ row.due_count }}</span>{% endif %}</td>
+    </tr>
+  {% empty %}<tr><td colspan="14" class="muted">Belum ada data warga.</td></tr>{% endfor %}
+  </tbody>
+</table>
+</div>
+<p class="legend"><span class="c paid">✓</span> lunas <span class="c due">!</span> belum bayar <span class="c future">+</span> bayar di muka <span class="c na"></span> tidak wajib</p>
+{% endblock %}
